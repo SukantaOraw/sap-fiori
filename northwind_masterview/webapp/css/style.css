@@ -1,0 +1,26 @@
+/* Enter your custom styles here */
+
+.thinDivider {
+    height: 1px;
+    background-color: #d9d9d9;
+    width: 100%;
+    display: block;
+}
+
+/* 🔹 Force the Master Area to be wider (500px) */
+.wideMasterSplitter .sapMSplitContainerMaster {
+    width: 500px !important;
+    max-width: 500px !important;
+    min-width: 500px !important;
+}
+
+/* 🔹 Adjust the Detail Area to take the remaining space */
+.wideMasterSplitter .sapMSplitContainerDetail {
+    width: calc(100% - 500px) !important;
+    left: 500px !important; /* Move it over to the right */
+}
+
+/* 🔹 Improve Panel styling inside the list */
+.flatPanel .sapMPanelContent {
+    padding: 1rem;
+}

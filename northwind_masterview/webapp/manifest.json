@@ -1,0 +1,103 @@
+{
+  "_version": "1.81.0",
+
+  "sap.app": {
+    "id": "northwindmasterview",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+
+    "dataSources": {
+      "mainService": {
+        "uri": "/northwind/Northwind.svc/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+
+  "sap.ui5": {
+    "flexEnabled": true,
+
+    "dependencies": {
+      "minUI5Version": "1.144.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+
+    "models": {
+      "": {
+        "dataSource": "mainService",
+        "type": "sap.ui.model.odata.v2.ODataModel",
+        "settings": {
+          "defaultOperationMode": "Server",
+          "useBatch": false
+        }
+      },
+
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "northwindmasterview.i18n.i18n"
+        }
+      }
+    },
+
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "northwindmasterview.view",
+        "async": true
+      },
+
+      "routes": [
+        {
+          "name": "RouteNorthWind_MasterView",
+          "pattern": ":?query:",
+          "target": ["TargetNorthWind_MasterView"]
+        }
+      ],
+
+      "targets": {
+        "TargetNorthWind_MasterView": {
+          "id": "NorthWind_MasterView",
+          "name": "NorthWind_MasterView"
+        }
+      }
+    },
+
+    "rootView": {
+      "viewName": "northwindmasterview.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}
