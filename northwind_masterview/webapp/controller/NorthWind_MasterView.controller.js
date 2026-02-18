@@ -41,6 +41,41 @@ sap.ui.define(
             });
         },
 
+        /* ================================================= */
+        /* USER AVATAR PRESS (Toggle Menu)                   */
+        /* ================================================= */
+        onUserAvatarPress: function (oEvent) {
+            var oAvatar = oEvent.getSource();
+
+            // 1. Create the User Menu (ActionSheet) if it doesn't exist yet
+            if (!this._oUserMenu) {
+                this._oUserMenu = new ActionSheet({
+                    showCancelButton: false,
+                    placement: "Bottom",
+                    buttons: [
+                        new Button({ text: "User Profile", icon: "sap-icon://person-placeholder", press: function() { MessageToast.show("Profile Clicked"); } }),
+                        new Button({ text: "App Settings", icon: "sap-icon://action-settings", press: function() { MessageToast.show("Settings Clicked"); } }),
+                        new Button({ text: "Logout", icon: "sap-icon://log", type: "Reject", press: function() { MessageToast.show("Logged Out"); } })
+                    ],
+                    // 🔹 Reset state when closed
+                    afterClose: function () {
+                        // Optional: If you had a custom "active" style, remove it here
+                    }
+                });
+                this.getView().addDependent(this._oUserMenu);
+            }
+
+            // 2. Open the menu by the Avatar
+            this._oUserMenu.openBy(oAvatar);
+        },
+
+        // Toggle the Side Navigation (Open/Close)
+        onCollapseExpandPress: function () {
+          var oToolPage = this.byId("toolPage");
+          var bSideExpanded = oToolPage.getSideExpanded();
+          oToolPage.setSideExpanded(!bSideExpanded);
+        },
+
         /* ========================= */
         /* ORDERS BUTTON IN MASTER  */
         /* ========================= */
@@ -58,8 +93,8 @@ sap.ui.define(
           console.log("Orders pressed for:", sCustomerID);
 
           // 🔹 Reset Layout: Show Orders, HIDE Items (clean slate)
-            this.byId("ordersPage").setVisible(true);
-            this.byId("itemsPage").setVisible(false);
+          this.byId("ordersPage").setVisible(true);
+          this.byId("itemsPage").setVisible(false);
 
           // 🔹 OPEN BUSY DIALOG HERE
           this._showBusyDialog();

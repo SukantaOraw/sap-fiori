@@ -5,175 +5,189 @@
     xmlns:l="sap.ui.layout"
     xmlns:core="sap.ui.core" height="100%" displayBlock="true" id="mainView">
 
-    <HBox id="mainHBox" height="100%" fitContainer="true">
+    <tnt:ToolPage id="toolPage" sideExpanded="true">
 
-        <tnt:SideNavigation id="sideNav">
-            <tnt:NavigationList id="navList" itemSelect="onItemSelect" selectedKey="customers">
-                <tnt:NavigationListItem id="navCustomers" text="Customers" icon="sap-icon://customer" key="customers" />
-                <tnt:NavigationListItem id="navOrders" text="Orders" icon="sap-icon://sales-order" key="orders" />
-            </tnt:NavigationList>
-        </tnt:SideNavigation>
+        <tnt:header>
+            <tnt:ToolHeader>
+                <Button icon="sap-icon://menu" type="Transparent" press=".onCollapseExpandPress" />
+                <Title text="Northwind App" level="H1" />
 
-        <l:Splitter id="mainSplit" height="100%" width="100%">
+                <ToolbarSpacer />
 
-            <l:layoutData>
-                <FlexItemData growFactor="1" />
-            </l:layoutData>
+                <Avatar id="userAvatar" initials="SO" displaySize="XS" displayShape="Circle" press=".onUserAvatarPress" class="sapUiTinyMarginEnd" />
+            </tnt:ToolHeader>
+        </tnt:header>
 
-            <l:contentAreas>
+        <tnt:sideContent>
+            <tnt:SideNavigation id="sideNav" expanded="true">
+                <tnt:NavigationList id="navList" itemSelect="onItemSelect" selectedKey="customers">
+                    <tnt:NavigationListItem id="navCustomers" text="Customers" icon="sap-icon://customer" key="customers" />
+                    <tnt:NavigationListItem id="navOrders" text="Orders" icon="sap-icon://sales-order" key="orders" />
+                </tnt:NavigationList>
+            </tnt:SideNavigation>
+        </tnt:sideContent>
 
-                <Page id="customersPage" title="Customers" showHeader="true">
+        <tnt:mainContents >
+            <l:Splitter id="mainSplit" height="100%" width="100%" class="sapUiTinyMargin sapUiTinyMarginTop">
 
-                    <layoutData>
-                        <l:SplitterLayoutData id="customersLayout" resizable="true" size="auto" minSize="300px" />
-                    </layoutData>
+                <l:layoutData>
+                    <FlexItemData growFactor="1" />
+                </l:layoutData>
 
-                    <ScrollContainer vertical="true" height="100%" width="100%">
+                <l:contentAreas>
 
-                        <VBox class="">
+                    <Page id="customersPage" title="Customers" showHeader="true">
 
-                            <List id="customersList" items="{customersModel>/}" width="100%" showSeparators="None" class="sapUiContentPadding">
+                        <layoutData>
+                            <l:SplitterLayoutData id="customersLayout" resizable="true" size="auto" minSize="300px" />
+                        </layoutData>
 
-                                <CustomListItem id="customerListItem">
-                                    <Panel id="customerPanel" expandable="true" expanded="false" class="flatPanel">
-                                        <headerToolbar >
-                                            <OverflowToolbar id="customerToolbar" height="auto" active="true" class="sapUiTinyMarginTop sapUiTinyMarginBottom">
-                                                <Avatar id="customerAvatar" displaySize="S" showBorder="true" />
-                                                <Title id="customerTitle" text="{customersModel>CompanyName}" />
-                                                <!-- Push content to right -->
-                                                <ToolbarSpacer />
-                                                <Button id="ordersButton" type="Accept" text="Orders" press="handleOrdersPress" ariaDescribedBy="acceptButtonDescription genericButtonDescription">
-                                                    <layoutData>
-                                                        <FlexItemData growFactor="1" />
-                                                    </layoutData>
-                                                </Button>
-                                            </OverflowToolbar>
-                                        </headerToolbar>
-                                        <content>
+                        <ScrollContainer vertical="true" height="100%" width="100%">
 
-                                            <VBox id="customerCardBox" class="">
+                            <VBox class="">
 
-                                                <!-- 🔹 Company Section -->
-                                                <VBox id="companySection" class="">
-                                                    <Text id="lblCompanyName" text="Company" class="sapUiSmallText"/>
-                                                    <Text id="txtCompanyName" text="{customersModel>CompanyName}"/>
-                                                </VBox>
+                                <List id="customersList" items="{customersModel>/}" width="100%" showSeparators="None" class="sapUiContentPadding">
 
-                                                <HBox id="divider1" class="thinDivider sapUiTinyMarginTop sapUiTinyMarginBottom"/>
+                                    <CustomListItem id="customerListItem">
+                                        <Panel id="customerPanel" expandable="true" expanded="false" class="flatPanel">
+                                            <headerToolbar >
+                                                <OverflowToolbar id="customerToolbar" height="auto" active="true" class="sapUiTinyMarginTop sapUiTinyMarginBottom">
+                                                    <Avatar id="customerAvatar" displaySize="S" showBorder="true" />
+                                                    <Title id="customerTitle" text="{customersModel>CompanyName}" />
+                                                    <!-- Push content to right -->
+                                                    <ToolbarSpacer />
+                                                    <Button id="ordersButton" type="Accept" text="Orders" press="handleOrdersPress" ariaDescribedBy="acceptButtonDescription genericButtonDescription">
+                                                        <layoutData>
+                                                            <FlexItemData growFactor="1" />
+                                                        </layoutData>
+                                                    </Button>
+                                                </OverflowToolbar>
+                                            </headerToolbar>
+                                            <content>
 
-                                                <!-- 🔹 Contact Section -->
-                                                <HBox id="contactSection" class="">
+                                                <VBox id="customerCardBox" class="">
 
-                                                    <VBox width="50%">
-                                                        <Text id="lblContactName" text="Contact" class="sapUiSmallText"/>
-                                                        <Text id="txtContactName" text="{customersModel>ContactName}"/>
+                                                    <!-- 🔹 Company Section -->
+                                                    <VBox id="companySection" class="">
+                                                        <Text id="lblCompanyName" text="Company" class="sapUiSmallText"/>
+                                                        <Text id="txtCompanyName" text="{customersModel>CompanyName}"/>
                                                     </VBox>
 
-                                                    <VBox width="50%">
-                                                        <Text id="lblContactTitle" text="Title" class="sapUiSmallText"/>
-                                                        <Text id="txtContactTitle" text="{customersModel>ContactTitle}"/>
-                                                    </VBox>
+                                                    <HBox id="divider1" class="thinDivider sapUiTinyMarginTop sapUiTinyMarginBottom"/>
 
-                                                </HBox>
+                                                    <!-- 🔹 Contact Section -->
+                                                    <HBox id="contactSection" class="">
 
-                                                <HBox id="divider2" class="thinDivider sapUiTinyMarginTop sapUiTinyMarginBottom"/>
+                                                        <VBox width="50%">
+                                                            <Text id="lblContactName" text="Contact" class="sapUiSmallText"/>
+                                                            <Text id="txtContactName" text="{customersModel>ContactName}"/>
+                                                        </VBox>
 
-                                                <!-- 🔹 Address Section -->
-                                                <VBox id="addressSection" class="">
+                                                        <VBox width="50%">
+                                                            <Text id="lblContactTitle" text="Title" class="sapUiSmallText"/>
+                                                            <Text id="txtContactTitle" text="{customersModel>ContactTitle}"/>
+                                                        </VBox>
 
-                                                    <Text id="lblAddress" text="Address" class="sapUiSmallText"/>
+                                                    </HBox>
 
-                                                    <Text id="txtAddress" text="{customersModel>Address}"/>
+                                                    <HBox id="divider2" class="thinDivider sapUiTinyMarginTop sapUiTinyMarginBottom"/>
 
-                                                    <Text id="txtCityRegionPostal" text="{= ${customersModel>City} 
+                                                    <!-- 🔹 Address Section -->
+                                                    <VBox id="addressSection" class="">
+
+                                                        <Text id="lblAddress" text="Address" class="sapUiSmallText"/>
+
+                                                        <Text id="txtAddress" text="{customersModel>Address}"/>
+
+                                                        <Text id="txtCityRegionPostal" text="{= ${customersModel>City} 
                           + ', ' 
                           + (${customersModel>Region} ? ${customersModel>Region} + ' ' : '') 
                           + ${customersModel>PostalCode} }" class=""/>
 
-                                                    <Text id="txtCountry" text="{customersModel>Country}"/>
+                                                        <Text id="txtCountry" text="{customersModel>Country}"/>
 
+                                                    </VBox>
+
+                                                    <HBox id="divider3" class="thinDivider sapUiTinyMarginTop sapUiTinyMarginBottom"/>
+
+                                                    <!-- 🔹 Technical / Contact Info -->
+                                                    <l:Grid id="infoGrid" defaultSpan="L4 M6 S12" hSpacing="0" vSpacing="0" class="sapUiTinyMarginBottom">
+
+                                                        <VBox>
+                                                            <Text id="lblCustomerID" text="Customer ID" class="sapUiSmallText"/>
+                                                            <Text id="txtCustomerID" text="{customersModel>CustomerID}"/>
+                                                        </VBox>
+
+                                                        <VBox>
+                                                            <Text id="lblPhone" text="Phone" class="sapUiSmallText"/>
+                                                            <Text id="txtPhone" text="{customersModel>Phone}"/>
+                                                        </VBox>
+
+                                                        <VBox>
+                                                            <Text id="lblFax" text="Fax" class="sapUiSmallText"/>
+                                                            <Text id="txtFax" text="{customersModel>Fax}"/>
+                                                        </VBox>
+                                                    </l:Grid>
                                                 </VBox>
+                                            </content>
+                                        </Panel>
+                                    </CustomListItem>
 
-                                                <HBox id="divider3" class="thinDivider sapUiTinyMarginTop sapUiTinyMarginBottom"/>
+                                </List>
+                            </VBox>
 
-                                                <!-- 🔹 Technical / Contact Info -->
-                                                <l:Grid id="infoGrid" defaultSpan="L4 M6 S12" hSpacing="0" vSpacing="0" class="sapUiTinyMarginBottom">
+                        </ScrollContainer>
+                    </Page>
 
-                                                    <VBox>
-                                                        <Text id="lblCustomerID" text="Customer ID" class="sapUiSmallText"/>
-                                                        <Text id="txtCustomerID" text="{customersModel>CustomerID}"/>
-                                                    </VBox>
 
-                                                    <VBox>
-                                                        <Text id="lblPhone" text="Phone" class="sapUiSmallText"/>
-                                                        <Text id="txtPhone" text="{customersModel>Phone}"/>
-                                                    </VBox>
+                    <Page id="ordersPage" title="Orders" showHeader="true" visible="false">
+                        <layoutData>
+                            <l:SplitterLayoutData id="ordersLayout" size="auto" resizable="true" minSize="250px"/>
+                        </layoutData>
 
-                                                    <VBox>
-                                                        <Text id="lblFax" text="Fax" class="sapUiSmallText"/>
-                                                        <Text id="txtFax" text="{customersModel>Fax}"/>
-                                                    </VBox>
-                                                </l:Grid>
-                                            </VBox>
-                                        </content>
-                                    </Panel>
-                                </CustomListItem>
+                        <VBox id="ordersPageLayout" class="sapUiSmallMargin">
 
+                            <!-- <Title text="{orderModel>/CustomerName}" level="H3" class="sapUiSmallMarginBottom"/> -->
+
+                            <List id="ordersList" items="{orderModel>/Orders}" headerText="{orderModel>/CustomerName} Orders" width="100%" noDataText="No data">
+
+                                <ObjectListItem title="Order {orderModel>OrderID}" type="Active" press="onOrderPress" intro="{orderModel>OrderDate}">
+
+                                    <attributes>
+                                        <ObjectAttribute text="{= ${orderModel>Order_Details}.length } Items" />
+                                    </attributes>
+
+                                </ObjectListItem>
+
+                            </List>
+
+                        </VBox>
+
+                    </Page>
+
+                    <!-- Items Page -->
+                    <Page id="itemsPage" title="Order Items" showHeader="true" visible="false">
+                        <layoutData>
+                            <l:SplitterLayoutData id="itemsLayout" size="auto" resizable="true" minSize="200px"/>
+                        </layoutData>
+
+                        <headerContent>
+                            <Title text="Order #{itemsModel>/OrderID}" level="H3"/>
+                        </headerContent>
+
+                        <VBox class="sapUiSmallMargin">
+                            <List id="itemsList" items="{itemsModel>/Order_Details}" noDataText="No data">
+
+                                <StandardListItem title="{itemsModel>Product/ProductName}" description="Qty: {itemsModel>Quantity}" icon="sap-icon://product" info="{itemsModel>UnitPrice}" infoState="Success"/>
                             </List>
                         </VBox>
 
-                    </ScrollContainer>
-                </Page>
+                    </Page>
 
+                </l:contentAreas>
 
-                <Page id="ordersPage" title="Orders" showHeader="true" visible="false">
-                    <layoutData>
-                        <l:SplitterLayoutData id="ordersLayout" size="auto" resizable="true" minSize="250px"/>
-                    </layoutData>
-
-                    <VBox id="ordersPageLayout" class="sapUiSmallMargin">
-
-                        <!-- <Title text="{orderModel>/CustomerName}" level="H3" class="sapUiSmallMarginBottom"/> -->
-
-                        <List id="ordersList" items="{orderModel>/Orders}" headerText="{orderModel>/CustomerName} Orders" width="100%" noDataText="No data">
-
-                            <ObjectListItem title="Order {orderModel>OrderID}" type="Active" press="onOrderPress" intro="{orderModel>OrderDate}">
-
-                                <attributes>
-                                    <ObjectAttribute text="{= ${orderModel>Order_Details}.length } Items" />
-                                </attributes>
-
-                            </ObjectListItem>
-
-                        </List>
-
-                    </VBox>
-
-                </Page>
-
-                <!-- Items Page -->
-                <Page id="itemsPage" title="Order Items" showHeader="true" visible="false">
-                    <layoutData>
-                        <l:SplitterLayoutData id="itemsLayout" size="auto" resizable="true" minSize="200px"/>
-                    </layoutData>
-
-                    <headerContent>
-                        <Title text="Order #{itemsModel>/OrderID}" level="H3"/>
-                    </headerContent>
-
-                    <VBox class="sapUiSmallMargin">
-                        <List id="itemsList" items="{itemsModel>/Order_Details}" noDataText="No data">
-
-                            <StandardListItem title="{itemsModel>Product/ProductName}" description="Qty: {itemsModel>Quantity}" icon="sap-icon://product" info="{itemsModel>UnitPrice}" infoState="Success"/>
-                        </List>
-                    </VBox>
-
-                </Page>
-
-            </l:contentAreas>
-
-        </l:Splitter>
-
-    </HBox>
+            </l:Splitter>
+        </tnt:mainContents>
+    </tnt:ToolPage>
 
 </mvc:View>
