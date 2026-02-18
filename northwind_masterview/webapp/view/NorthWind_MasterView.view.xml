@@ -2,7 +2,10 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:tnt="sap.tnt"
+    xmlns:st="sap.ui.comp.smarttable"
+    xmlns:table="sap.ui.table"
     xmlns:l="sap.ui.layout"
+    xmlns:uxap="sap.uxap"
     xmlns:core="sap.ui.core" height="100%" displayBlock="true" id="mainView">
 
     <tnt:ToolPage id="toolPage" sideExpanded="true">
@@ -13,6 +16,8 @@
                 <Title text="Northwind App" level="H1" />
 
                 <ToolbarSpacer />
+
+                <Button id="themeToggleBtn" icon="sap-icon://light-mode" type="Transparent" press=".onThemeTogglePress" tooltip="Switch Theme"/>
 
                 <Avatar id="userAvatar" initials="SO" displaySize="XS" displayShape="Circle" press=".onUserAvatarPress" class="sapUiTinyMarginEnd" />
             </tnt:ToolHeader>
@@ -28,7 +33,7 @@
         </tnt:sideContent>
 
         <tnt:mainContents >
-            <l:Splitter id="mainSplit" height="100%" width="100%" class="sapUiTinyMargin sapUiTinyMarginTop">
+            <l:Splitter id="mainSplit" height="100%" width="100%" class="sapUiTinyMarginRight">
 
                 <l:layoutData>
                     <FlexItemData growFactor="1" />
@@ -39,7 +44,7 @@
                     <Page id="customersPage" title="Customers" showHeader="true">
 
                         <layoutData>
-                            <l:SplitterLayoutData id="customersLayout" resizable="true" size="auto" minSize="300px" />
+                            <l:SplitterLayoutData id="customersLayout" resizable="true" size="30%" minSize="150px" />
                         </layoutData>
 
                         <ScrollContainer vertical="true" height="100%" width="100%">
@@ -142,7 +147,7 @@
 
                     <Page id="ordersPage" title="Orders" showHeader="true" visible="false">
                         <layoutData>
-                            <l:SplitterLayoutData id="ordersLayout" size="auto" resizable="true" minSize="250px"/>
+                            <l:SplitterLayoutData id="ordersLayout" size="20%" resizable="true" minSize="60px"/>
                         </layoutData>
 
                         <VBox id="ordersPageLayout" class="sapUiSmallMargin">
@@ -166,21 +171,144 @@
                     </Page>
 
                     <!-- Items Page -->
-                    <Page id="itemsPage" title="Order Items" showHeader="true" visible="false">
+                    <Page id="itemsPage" title="Order Detailed" showHeader="false" visible="false">
                         <layoutData>
-                            <l:SplitterLayoutData id="itemsLayout" size="auto" resizable="true" minSize="200px"/>
+                            <l:SplitterLayoutData id="itemsLayout" size="auto" resizable="true" minSize="50%"/>
                         </layoutData>
 
-                        <headerContent>
-                            <Title text="Order #{itemsModel>/OrderID}" level="H3"/>
-                        </headerContent>
+                        <uxap:ObjectPageLayout id="ObjectPageLayout" showTitleInHeaderContent="true" showEditHeaderButton="false">
 
-                        <VBox class="sapUiSmallMargin">
-                            <List id="itemsList" items="{itemsModel>/Order_Details}" noDataText="No data">
+                            <uxap:headerTitle>
+                                <uxap:ObjectPageDynamicHeaderTitle>
+                                    <uxap:expandedHeading>
+                                        <Title text="Order #{itemsModel>/OrderID}" wrapping="true" class=""/>
+                                    </uxap:expandedHeading>
 
-                                <StandardListItem title="{itemsModel>Product/ProductName}" description="Qty: {itemsModel>Quantity}" icon="sap-icon://product" info="{itemsModel>UnitPrice}" infoState="Success"/>
-                            </List>
-                        </VBox>
+                                    <uxap:snappedHeading>
+                                        <Title text="Order #{itemsModel>/OrderID}" wrapping="true"/>
+                                    </uxap:snappedHeading>
+
+
+                                </uxap:ObjectPageDynamicHeaderTitle>
+                            </uxap:headerTitle>
+
+                            <uxap:headerContent>
+                                <FlexBox wrap="Wrap" fitContainer="true" alignItems="Start">
+                                    <VBox class="sapUiMediumMarginEnd">
+                                        <Title text="Summary" class="" />
+
+                                        <HBox alignItems="Center">
+                                            <Label text="Total Line Items:" class="sapUiTinyMarginEnd" />
+                                            <ObjectStatus text="{= ${itemsModel>/Order_Details}.length }" state="Information" />
+                                        </HBox>
+
+                                    </VBox>
+
+                                    <VBox class="sapUiSmallMarginEnd">
+                                        <Title text="Status" class="" />
+                                        <ObjectStatus text="Shipped" state="Success" icon="sap-icon://shipping-status"/>
+                                    </VBox>
+                                </FlexBox>
+                            </uxap:headerContent>
+
+                            <uxap:sections>
+
+                                <uxap:ObjectPageSection showTitle="false" class="myNoPaddingSection sapUiNoMarginTop sapUiNoVerticalContentPadding">
+
+                                    <uxap:ObjectPageSubSection class="myNoPaddingSection sapUiNoMarginTop sapUiNoVerticalContentPadding" showTitle="false" >
+                                        <uxap:blocks>
+
+                                            <st:SmartTable id="smartTable" header="Products" showRowCount="true" useTablePersonalisation="true" showFullScreenButton="true" enableAutoBinding="false" entitySet="LineItems">
+
+                                                <Table id="itemsTable" inset="false" items="{itemsModel>/Order_Details}" sticky="ColumnHeaders,HeaderToolbar" growing="true" growingThreshold="10">
+
+                                                    <columns>
+
+                                                        <Column width="12rem">
+                                                            <customData>
+                                                                <core:CustomData key="p13nData" value='\{"columnKey": "Product/ProductName", "leadingProperty": "Product/ProductName", "sortProperty": "Product/ProductName", "filterProperty": "Product/ProductName"}' />
+                                                            </customData>
+                                                            <Text text="Product" />
+                                                        </Column>
+
+                                                        <Column minScreenWidth="Tablet" demandPopin="true">
+                                                            <customData>
+                                                                <core:CustomData key="p13nData" value='\{"columnKey": "ProductID", "leadingProperty": "ProductID"}' />
+                                                            </customData>
+                                                            <Text text="ID / Supplier" />
+                                                        </Column>
+
+                                                        <Column minScreenWidth="Desktop" demandPopin="true">
+                                                            <customData>
+                                                                <core:CustomData key="p13nData" value='\{"columnKey": "Product/QuantityPerUnit", "leadingProperty": "Product/QuantityPerUnit"}' />
+                                                            </customData>
+                                                            <Text text="Packaging" />
+                                                        </Column>
+
+                                                        <Column hAlign="End">
+                                                            <customData>
+                                                                <core:CustomData key="p13nData" value='\{"columnKey": "UnitPrice", "leadingProperty": "UnitPrice", "sortProperty": "UnitPrice"}' />
+                                                            </customData>
+                                                            <Text text="Price" />
+                                                        </Column>
+
+                                                        <Column hAlign="Center">
+                                                            <customData>
+                                                                <core:CustomData key="p13nData" value='\{"columnKey": "Quantity", "leadingProperty": "Quantity", "sortProperty": "Quantity"}' />
+                                                            </customData>
+                                                            <Text text="Qty" />
+                                                        </Column>
+
+                                                        <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+                                                            <customData>
+                                                                <core:CustomData key="p13nData" value='\{"columnKey": "Discount", "leadingProperty": "Discount"}' />
+                                                            </customData>
+                                                            <Text text="Discount" />
+                                                        </Column>
+
+                                                        <Column hAlign="End">
+                                                            <customData>
+                                                                <core:CustomData key="p13nData" value='\{"columnKey": "Total", "leadingProperty": "Total"}' />
+                                                            </customData>
+                                                            <Text text="Total" />
+                                                        </Column>
+                                                    </columns>
+
+                                                    <items>
+                                                        <ColumnListItem>
+                                                            <cells>
+                                                                <ObjectIdentifier title="{itemsModel>Product/ProductName}" text="Category: {itemsModel>Product/CategoryID}"/>
+
+                                                                <VBox>
+                                                                    <Text text="ID: {itemsModel>ProductID}" class="sapUiTinyMarginBottom"/>
+                                                                    <Text text="Supp: {itemsModel>Product/SupplierID}" class="sapUiTinyMarginBottom"/>
+                                                                </VBox>
+
+                                                                <Text text="{itemsModel>Product/QuantityPerUnit}" />
+
+                                                                <ObjectNumber number="{ path: 'itemsModel>UnitPrice', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2, maxFractionDigits: 2} }" unit="EUR" />
+
+                                                                <ObjectNumber number="{itemsModel>Quantity}" state="Success" />
+
+                                                                <Text text="{= ${itemsModel>Discount} * 100 } %" />
+
+                                                                <ObjectNumber number="{= (parseFloat(${itemsModel>UnitPrice}) * ${itemsModel>Quantity}).toFixed(2) }" unit="EUR" state="Information" emphasized="true"/>
+                                                            </cells>
+                                                        </ColumnListItem>
+                                                    </items>
+
+                                                </Table>
+
+                                            </st:SmartTable>
+
+                                        </uxap:blocks>
+                                    </uxap:ObjectPageSubSection>
+
+                                </uxap:ObjectPageSection>
+
+                            </uxap:sections>
+
+                        </uxap:ObjectPageLayout>
 
                     </Page>
 

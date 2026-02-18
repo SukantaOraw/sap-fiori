@@ -3,8 +3,9 @@ sap.ui.define(
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/BusyDialog", // 🔹 Import BusyDialog
+    "sap/ui/core/Theming", // ✅ Import Theming
   ],
-  function (Controller, JSONModel, BusyDialog) {
+  function (Controller, JSONModel, BusyDialog, Theming) {
     "use strict";
 
     return Controller.extend(
@@ -39,6 +40,27 @@ sap.ui.define(
               // 🔹 3. HIDE BUSY DIALOG ON ERROR
               this._closeBusyDialog();
             });
+        },
+
+        /* ================================================= */
+        /* TOGGLE DARK / LIGHT MODE                          */
+        /* ================================================= */
+        onThemeTogglePress: function (oEvent) {
+            var oButton = oEvent.getSource();
+
+            // Check current theme
+            // (If you are on an older UI5 version < 1.100, use sap.ui.getCore().getConfiguration().getTheme())
+            var sCurrentTheme = Theming.getTheme(); 
+
+            if (sCurrentTheme === "sap_fiori_3_dark") {
+                // Switch to Light
+                Theming.setTheme("sap_fiori_3");
+                oButton.setIcon("sap-icon://light-mode");
+            } else {
+                // Switch to Dark
+                Theming.setTheme("sap_fiori_3_dark");
+                oButton.setIcon("sap-icon://dark-mode"); // Change icon to moon/dark
+            }
         },
 
         /* ================================================= */
@@ -226,6 +248,7 @@ sap.ui.define(
             Order_Details: aOrderDetails,
           });
           this.getView().setModel(oItemsModel, "itemsModel");
+          console.log(oItemsModel);
 
           // 3. Reveal the Items Page (if hidden)
           var oItemsPage = this.byId("itemsPage");
