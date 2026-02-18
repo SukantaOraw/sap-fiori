@@ -131,7 +131,7 @@
                         <l:SplitterLayoutData id="ordersLayout" size="auto" resizable="true" minSize="250px"/>
                     </layoutData>
 
-                    <VBox class="sapUiSmallMargin">
+                    <VBox id="ordersPageLayout" class="sapUiSmallMargin">
 
                         <!-- <Title text="{orderModel>/CustomerName}" level="H3" class="sapUiSmallMarginBottom"/> -->
 
