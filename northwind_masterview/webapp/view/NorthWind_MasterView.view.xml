@@ -52,6 +52,12 @@
                             <l:SplitterLayoutData id="customersLayout" resizable="true" size="30%" minSize="150px" />
                         </layoutData>
 
+                        <subHeader>
+                            <OverflowToolbar >
+                                <SearchField liveChange=".onSearchCustomers" width="100%" class="sapUiContentPadding"/>
+                            </OverflowToolbar>
+                        </subHeader>
+
                         <ScrollContainer vertical="true" height="100%" width="100%">
 
                             <VBox class="">

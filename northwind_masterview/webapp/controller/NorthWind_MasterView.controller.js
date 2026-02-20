@@ -5,8 +5,10 @@ sap.ui.define(
     "sap/m/BusyDialog", // 🔹 Import BusyDialog
     "sap/ui/core/Theming", // ✅ Import Theming
     "sap/ui/core/Configuration", // ✅ Import this to handle languages
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
   ],
-  function (Controller, JSONModel, BusyDialog, Theming, Configuration) {
+  function (Controller, JSONModel, BusyDialog, Theming, Configuration, Filter, FilterOperator,) {
     "use strict";
 
     return Controller.extend(
@@ -16,10 +18,9 @@ sap.ui.define(
         /* INIT - LOAD CUSTOMERS */
         /* ===================== */
         onInit: function () {
-          console.log("NorthWind_MasterView loaded");
-
           // 🔹 1. SHOW BUSY DIALOG IMMEDIATELY
           this._showBusyDialog();
+          console.log("NorthWind_MasterView loaded");
 
           fetch("/northwind/Northwind.svc/Customers?$format=json")
             .then((response) => response.json())
@@ -127,6 +128,56 @@ sap.ui.define(
           var oToolPage = this.byId("toolPage");
           var bSideExpanded = oToolPage.getSideExpanded();
           oToolPage.setSideExpanded(!bSideExpanded);
+        },
+
+        onSearchCustomers: function (oEvent) {
+          // 1. Get the text the user typed
+          var sQuery = oEvent.getSource().getValue();
+          var aFilters = [];
+
+          // 2. If the search box is NOT empty, create the filter
+          if (sQuery && sQuery.length > 0) {
+            // Create a filter: "Does the CompanyName contain the typed text?"
+            // Note: FilterOperator.Contains is usually case-sensitive.
+            var oFilter = new Filter(
+              "CompanyName",
+              FilterOperator.Contains,
+              sQuery,
+            );
+
+            aFilters.push(oFilter);
+            // console.log(oFilter);
+
+            /* 💡 PRO-TIP: Want to search by Company Name OR Contact Name? Use this instead: */
+
+            // var oFilterName = new Filter(
+            //   "CompanyName",
+            //   FilterOperator.Contains,
+            //   sQuery,
+            // );
+            // var oFilterContact = new Filter(
+            //   "ContactName",
+            //   FilterOperator.Contains,
+            //   sQuery,
+            // );
+            // var oCombinedFilter = new Filter({
+            //   filters: [oFilterName, oFilterContact],
+            //   and: false, // 'false' means OR. 'true' means AND.
+            // });
+            // aFilters.push(oCombinedFilter);
+            // console.log(oCombinedFilter);
+          }
+
+          // 3. Find the List on the screen and apply the filter
+          // ⚠️ IMPORTANT: Change "customersList" to the actual ID of your <List> in the XML View
+          var oList = this.byId("customersList");
+
+          // Get the data binding attached to the list
+          var oBinding = oList.getBinding("items");
+
+          // Apply the filter.
+          // If aFilters is empty (user deleted the text), this automatically resets the list!
+          oBinding.filter(aFilters);
         },
 
         /* ========================= */
