@@ -60,7 +60,9 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "northwindmasterview.i18n.i18n"
+          "bundleName": "northwindmasterview.i18n.i18n",
+          "supportedLocales": ["en", "hi"],
+          "fallbackLocale": "en"
         }
       }
     },

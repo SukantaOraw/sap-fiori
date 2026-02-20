@@ -4,8 +4,9 @@ sap.ui.define(
     "sap/ui/model/json/JSONModel",
     "sap/m/BusyDialog", // 🔹 Import BusyDialog
     "sap/ui/core/Theming", // ✅ Import Theming
+    "sap/ui/core/Configuration", // ✅ Import this to handle languages
   ],
-  function (Controller, JSONModel, BusyDialog, Theming) {
+  function (Controller, JSONModel, BusyDialog, Theming, Configuration) {
     "use strict";
 
     return Controller.extend(
@@ -43,52 +44,82 @@ sap.ui.define(
         },
 
         /* ================================================= */
+        /* CHANGE LANGUAGE                                   */
+        /* ================================================= */
+        onChangeLanguage: function (oEvent) {
+          // 1. Get the key of the selected item ('en' or 'hi')
+          var sLanguage = oEvent.getParameter("selectedItem").getKey();
+
+          // 2. Tell the UI5 framework to switch the language instantly
+          Configuration.setLanguage(sLanguage);
+        },
+
+        /* ================================================= */
         /* TOGGLE DARK / LIGHT MODE                          */
         /* ================================================= */
         onThemeTogglePress: function (oEvent) {
-            var oButton = oEvent.getSource();
+          var oButton = oEvent.getSource();
 
-            // Check current theme
-            // (If you are on an older UI5 version < 1.100, use sap.ui.getCore().getConfiguration().getTheme())
-            var sCurrentTheme = Theming.getTheme(); 
+          // Check current theme
+          // (If you are on an older UI5 version < 1.100, use sap.ui.getCore().getConfiguration().getTheme())
+          var sCurrentTheme = Theming.getTheme();
 
-            if (sCurrentTheme === "sap_fiori_3_dark") {
-                // Switch to Light
-                Theming.setTheme("sap_fiori_3");
-                oButton.setIcon("sap-icon://light-mode");
-            } else {
-                // Switch to Dark
-                Theming.setTheme("sap_fiori_3_dark");
-                oButton.setIcon("sap-icon://dark-mode"); // Change icon to moon/dark
-            }
+          if (sCurrentTheme === "sap_fiori_3_dark") {
+            // Switch to Light
+            Theming.setTheme("sap_fiori_3");
+            oButton.setIcon("sap-icon://light-mode");
+          } else {
+            // Switch to Dark
+            Theming.setTheme("sap_fiori_3_dark");
+            oButton.setIcon("sap-icon://dark-mode"); // Change icon to moon/dark
+          }
         },
 
         /* ================================================= */
         /* USER AVATAR PRESS (Toggle Menu)                   */
         /* ================================================= */
         onUserAvatarPress: function (oEvent) {
-            var oAvatar = oEvent.getSource();
+          var oAvatar = oEvent.getSource();
 
-            // 1. Create the User Menu (ActionSheet) if it doesn't exist yet
-            if (!this._oUserMenu) {
-                this._oUserMenu = new ActionSheet({
-                    showCancelButton: false,
-                    placement: "Bottom",
-                    buttons: [
-                        new Button({ text: "User Profile", icon: "sap-icon://person-placeholder", press: function() { MessageToast.show("Profile Clicked"); } }),
-                        new Button({ text: "App Settings", icon: "sap-icon://action-settings", press: function() { MessageToast.show("Settings Clicked"); } }),
-                        new Button({ text: "Logout", icon: "sap-icon://log", type: "Reject", press: function() { MessageToast.show("Logged Out"); } })
-                    ],
-                    // 🔹 Reset state when closed
-                    afterClose: function () {
-                        // Optional: If you had a custom "active" style, remove it here
-                    }
-                });
-                this.getView().addDependent(this._oUserMenu);
-            }
+          // 1. Create the User Menu (ActionSheet) if it doesn't exist yet
+          if (!this._oUserMenu) {
+            this._oUserMenu = new ActionSheet({
+              showCancelButton: false,
+              placement: "Bottom",
+              buttons: [
+                new Button({
+                  text: "User Profile",
+                  icon: "sap-icon://person-placeholder",
+                  press: function () {
+                    MessageToast.show("Profile Clicked");
+                  },
+                }),
+                new Button({
+                  text: "App Settings",
+                  icon: "sap-icon://action-settings",
+                  press: function () {
+                    MessageToast.show("Settings Clicked");
+                  },
+                }),
+                new Button({
+                  text: "Logout",
+                  icon: "sap-icon://log",
+                  type: "Reject",
+                  press: function () {
+                    MessageToast.show("Logged Out");
+                  },
+                }),
+              ],
+              // 🔹 Reset state when closed
+              afterClose: function () {
+                // Optional: If you had a custom "active" style, remove it here
+              },
+            });
+            this.getView().addDependent(this._oUserMenu);
+          }
 
-            // 2. Open the menu by the Avatar
-            this._oUserMenu.openBy(oAvatar);
+          // 2. Open the menu by the Avatar
+          this._oUserMenu.openBy(oAvatar);
         },
 
         // Toggle the Side Navigation (Open/Close)
@@ -262,11 +293,13 @@ sap.ui.define(
         _showBusyDialog: function () {
           if (!this._pBusyDialog) {
             this._pBusyDialog = new BusyDialog({
-              title: "Loading Data",
-              text: "Please wait while we fetch the data...",
+              title: "{i18n>loadingData}",
+              text: "{i18n>loadingText}",
             });
           }
           this._pBusyDialog.open();
+          // MAGIC TRICK: Connect the dialog to the view so it can read the i18n file
+          this.getView().addDependent(this._pBusyDialog);
         },
 
         /* ========================== */

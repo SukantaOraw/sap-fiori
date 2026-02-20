@@ -13,9 +13,14 @@
         <tnt:header>
             <tnt:ToolHeader>
                 <Button icon="sap-icon://menu" type="Transparent" press=".onCollapseExpandPress" />
-                <Title text="Northwind App" level="H1" />
+                <Title text="{i18n>appTitle}" level="H1" />
 
                 <ToolbarSpacer />
+
+                <Select id="languageSelect" change=".onChangeLanguage" autoAdjustWidth="true" class="sapUiTinyMarginEnd">
+                    <core:Item key="en" text="English" />
+                    <core:Item key="hi" text="हिंदी (Hindi)" />
+                </Select>
 
                 <Button id="themeToggleBtn" icon="sap-icon://light-mode" type="Transparent" press=".onThemeTogglePress" tooltip="Switch Theme"/>
 
@@ -26,8 +31,8 @@
         <tnt:sideContent>
             <tnt:SideNavigation id="sideNav" expanded="true">
                 <tnt:NavigationList id="navList" itemSelect="onItemSelect" selectedKey="customers">
-                    <tnt:NavigationListItem id="navCustomers" text="Customers" icon="sap-icon://customer" key="customers" />
-                    <tnt:NavigationListItem id="navOrders" text="Orders" icon="sap-icon://sales-order" key="orders" />
+                    <tnt:NavigationListItem id="navCustomers" text="{i18n>customerTab}" icon="sap-icon://customer" key="customers" />
+                    <tnt:NavigationListItem id="navOrders" text="{i18n>orderTab}" icon="sap-icon://sales-order" key="orders" />
                 </tnt:NavigationList>
             </tnt:SideNavigation>
         </tnt:sideContent>
@@ -41,7 +46,7 @@
 
                 <l:contentAreas>
 
-                    <Page id="customersPage" title="Customers" showHeader="true">
+                    <Page id="customersPage" title="{i18n>customerTab}" showHeader="true">
 
                         <layoutData>
                             <l:SplitterLayoutData id="customersLayout" resizable="true" size="30%" minSize="150px" />
@@ -61,7 +66,7 @@
                                                     <Title id="customerTitle" text="{customersModel>CompanyName}" />
                                                     <!-- Push content to right -->
                                                     <ToolbarSpacer />
-                                                    <Button id="ordersButton" type="Accept" text="Orders" press="handleOrdersPress" ariaDescribedBy="acceptButtonDescription genericButtonDescription">
+                                                    <Button id="ordersButton" type="Accept" text="{i18n>orders}" press="handleOrdersPress" ariaDescribedBy="acceptButtonDescription genericButtonDescription">
                                                         <layoutData>
                                                             <FlexItemData growFactor="1" />
                                                         </layoutData>
@@ -74,7 +79,7 @@
 
                                                     <!-- 🔹 Company Section -->
                                                     <VBox id="companySection" class="">
-                                                        <Text id="lblCompanyName" text="Company" class="sapUiSmallText"/>
+                                                        <Text id="lblCompanyName" text="{i18n>company}" class="sapUiSmallText"/>
                                                         <Text id="txtCompanyName" text="{customersModel>CompanyName}"/>
                                                     </VBox>
 
@@ -84,12 +89,12 @@
                                                     <HBox id="contactSection" class="">
 
                                                         <VBox width="50%">
-                                                            <Text id="lblContactName" text="Contact" class="sapUiSmallText"/>
+                                                            <Text id="lblContactName" text="{i18n>contact}" class="sapUiSmallText"/>
                                                             <Text id="txtContactName" text="{customersModel>ContactName}"/>
                                                         </VBox>
 
                                                         <VBox width="50%">
-                                                            <Text id="lblContactTitle" text="Title" class="sapUiSmallText"/>
+                                                            <Text id="lblContactTitle" text="{i18n>title}" class="sapUiSmallText"/>
                                                             <Text id="txtContactTitle" text="{customersModel>ContactTitle}"/>
                                                         </VBox>
 
@@ -100,7 +105,7 @@
                                                     <!-- 🔹 Address Section -->
                                                     <VBox id="addressSection" class="">
 
-                                                        <Text id="lblAddress" text="Address" class="sapUiSmallText"/>
+                                                        <Text id="lblAddress" text="{i18n>address}" class="sapUiSmallText"/>
 
                                                         <Text id="txtAddress" text="{customersModel>Address}"/>
 
@@ -119,17 +124,17 @@
                                                     <l:Grid id="infoGrid" defaultSpan="L4 M6 S12" hSpacing="0" vSpacing="0" class="sapUiTinyMarginBottom">
 
                                                         <VBox>
-                                                            <Text id="lblCustomerID" text="Customer ID" class="sapUiSmallText"/>
+                                                            <Text id="lblCustomerID" text="{i18n>customerId}" class="sapUiSmallText"/>
                                                             <Text id="txtCustomerID" text="{customersModel>CustomerID}"/>
                                                         </VBox>
 
                                                         <VBox>
-                                                            <Text id="lblPhone" text="Phone" class="sapUiSmallText"/>
+                                                            <Text id="lblPhone" text="{i18n>phone}" class="sapUiSmallText"/>
                                                             <Text id="txtPhone" text="{customersModel>Phone}"/>
                                                         </VBox>
 
                                                         <VBox>
-                                                            <Text id="lblFax" text="Fax" class="sapUiSmallText"/>
+                                                            <Text id="lblFax" text="{i18n>fax}" class="sapUiSmallText"/>
                                                             <Text id="txtFax" text="{customersModel>Fax}"/>
                                                         </VBox>
                                                     </l:Grid>
@@ -145,7 +150,7 @@
                     </Page>
 
 
-                    <Page id="ordersPage" title="Orders" showHeader="true" visible="false">
+                    <Page id="ordersPage" title="{i18n>orders}" showHeader="true" visible="false">
                         <layoutData>
                             <l:SplitterLayoutData id="ordersLayout" size="20%" resizable="true" minSize="60px"/>
                         </layoutData>
@@ -154,12 +159,12 @@
 
                             <!-- <Title text="{orderModel>/CustomerName}" level="H3" class="sapUiSmallMarginBottom"/> -->
 
-                            <List id="ordersList" items="{orderModel>/Orders}" headerText="{orderModel>/CustomerName} Orders" width="100%" noDataText="No data">
+                            <List id="ordersList" items="{orderModel>/Orders}" headerText="{orderModel>/CustomerName} {i18n>orders}" width="100%" noDataText="{i18n>noData}">
 
-                                <ObjectListItem title="Order {orderModel>OrderID}" type="Active" press="onOrderPress" intro="{orderModel>OrderDate}">
+                                <ObjectListItem title="{i18n>orderTab} {orderModel>OrderID}" type="Active" press="onOrderPress" intro="{orderModel>OrderDate}">
 
                                     <attributes>
-                                        <ObjectAttribute text="{= ${orderModel>Order_Details}.length } Items" />
+                                        <ObjectAttribute text="{= ${orderModel>Order_Details}.length } {i18n>items}" />
                                     </attributes>
 
                                 </ObjectListItem>
@@ -171,7 +176,7 @@
                     </Page>
 
                     <!-- Items Page -->
-                    <Page id="itemsPage" title="Order Detailed" showHeader="false" visible="false">
+                    <Page id="itemsPage" title="{i18n>orderDetail}" showHeader="false" visible="false">
                         <layoutData>
                             <l:SplitterLayoutData id="itemsLayout" size="auto" resizable="true" minSize="50%"/>
                         </layoutData>
@@ -181,11 +186,11 @@
                             <uxap:headerTitle>
                                 <uxap:ObjectPageDynamicHeaderTitle>
                                     <uxap:expandedHeading>
-                                        <Title text="Order #{itemsModel>/OrderID}" wrapping="true" class=""/>
+                                        <Title text="{i18n>order} #{itemsModel>/OrderID}" wrapping="true" class=""/>
                                     </uxap:expandedHeading>
 
                                     <uxap:snappedHeading>
-                                        <Title text="Order #{itemsModel>/OrderID}" wrapping="true"/>
+                                        <Title text="{i18n>order} #{itemsModel>/OrderID}" wrapping="true"/>
                                     </uxap:snappedHeading>
 
 
@@ -195,19 +200,19 @@
                             <uxap:headerContent>
                                 <FlexBox wrap="Wrap" fitContainer="true" alignItems="Start">
                                     <VBox class="sapUiMediumMarginEnd">
-                                        <Title text="Summary" class="" />
+                                        <Title text="{i18n>summary}" class="" />
 
                                         <HBox alignItems="Center">
-                                            <Label text="Total Line Items:" class="sapUiTinyMarginEnd" />
+                                            <Label text="{i18n>lblTotalItems}" class="sapUiTinyMarginEnd" />
                                             <ObjectStatus text="{= ${itemsModel>/Order_Details}.length }" state="Information" />
                                         </HBox>
 
                                     </VBox>
 
-                                    <VBox class="sapUiSmallMarginEnd">
-                                        <Title text="Status" class="" />
-                                        <ObjectStatus text="Shipped" state="Success" icon="sap-icon://shipping-status"/>
-                                    </VBox>
+                                    <!-- <VBox class="sapUiSmallMarginEnd">
+                                        <Title text="{i18n>lblStatus}" class="" />
+                                        <ObjectStatus text="{i18n>valShipped}" state="Success" icon="sap-icon://shipping-status"/>
+                                    </VBox> -->
                                 </FlexBox>
                             </uxap:headerContent>
 
@@ -215,10 +220,10 @@
 
                                 <uxap:ObjectPageSection showTitle="false" class="myNoPaddingSection sapUiNoMarginTop sapUiNoVerticalContentPadding">
 
-                                    <uxap:ObjectPageSubSection class="myNoPaddingSection sapUiNoMarginTop sapUiNoVerticalContentPadding" showTitle="false" >
+                                    <uxap:ObjectPageSubSection class="myNoPaddingSection sapUiNoMarginTop sapUiNoVerticalContentPadding" showTitle="false">
                                         <uxap:blocks>
 
-                                            <st:SmartTable id="smartTable" header="Products" showRowCount="true" useTablePersonalisation="true" showFullScreenButton="true" enableAutoBinding="false" entitySet="LineItems">
+                                            <st:SmartTable id="smartTable" header="{i18n>products}" showRowCount="true" useTablePersonalisation="true" showFullScreenButton="true" enableAutoBinding="false" entitySet="LineItems">
 
                                                 <Table id="itemsTable" inset="false" items="{itemsModel>/Order_Details}" sticky="ColumnHeaders,HeaderToolbar" growing="true" growingThreshold="10">
 
